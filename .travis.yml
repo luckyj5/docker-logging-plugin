@@ -1,19 +1,17 @@
 sudo: required
 dist: trusty
-
 language: go
 go:
 - 1.8.x
 services:
 - docker
-
 script:
-- wget https://github.com/jwilder/docker-gen/releases/download/0.7.3/docker-gen-linux-amd64-0.7.3.tar.gz
-- tar xvzf docker-gen-linux-amd64-0.7.3.tar.gz
-- ./docker-gen  
+- docker run -d chentex/random-logger:latest
 - go get -t -v ./...
 - make
 - docker ps
+- docker run --log-driver=splunk --log-opt splunk-url=$SPLUNK_HOST --log-opt splunk-token=$SPLUNK_TOKEN --log-opt splunk-insecureskipverify=true -d chentex/random-logger:latest
+
 
 notifications:
   slack:
@@ -21,3 +19,7 @@ notifications:
   hipchat:
     rooms:
       secure: tDKHalJeH2zyRVFTbPcyggfxH+w/HmGnrJY/WMj3cnCNE1EPRTsEfp/LfxRx4R6dP/oq36x6mdT3W8/zwBiyH6515eDA0Hx6EcCmVJsbhNW0qB4TYAMjCouigBXISHTBqZ/BVTjJC0ShSjFDTVRlCHa3vAqQH3nhAl9HtAVoQXj4gMvwAawxHxrnOXY83sBM2QMwBkYhJgk08LQtdQQeus3c5pL9sEVAA5RqzLw5v+HjV2tlsZ8ft3aBMhUxvjkaFBQx4EbFetcWid9i4z4Rml68KbrMgesfOuFPeHKjp9bxYLkKMYMpzoEP8S1d5oM3GGMvfnHS2p8203S0tpssmjW0LWqk7zlL7HHZYaivDs2hhFUk5OvsOYy8yzViXMPDdlxkX/Pm4lXarzRfu214hOzWdObmxKU83Af5iVQ6iLvS7L/KzJo0w2LiNKZbsLCqDLXWE757qRqs+Ai7Xu2cZZVl0OqrcjUfOCacTiepawtUZoMGxwUNJsBmXxd2phN8Iyr2sTTS1DXKwKuAfqDeaBY6Hcvxx3wt2vGBkUIaOiMoTBkGKjIXlnruAL5Aei13bNo4KLHrO1b0Yl+GrMv1gIvmv7h2b5ReBWh6wuMx4c6u/NHTF8i6QXz2kAuoHcfBOCP5ZlXYZ3SY7fAH2wO1u4CF2fwFmp0rpU3PlbsF/ds=
+env:
+  global:
+  - secure: jY/GRWno6Ex3EowL/Ndf6+WGFlkWNHtux3rCKTujTxMM10oKDNy0VxpjHjYyTNF4foRyR7TP0cIIlLHNbSQRYDjHRGrESV7YFh9H1otBsozXA+WScPuw2SGjmA7qacl/by+5e6kW9xGiVIT8hM52jQK7JoxTllyHLRbCnDq/1DIYM1QIGAwwgOqjA7olOmrWaXJyf3UuhHpL0qULyQ/NKJq+Nl6htF5sELFndPUAf1fl4pcoqTS4EgdlGN71CtA6klT4Z6PyA3S0vzBiv4GaReVfzWvMkddal9pRL/VtiHq/eLlZ/jDQ2Tg3yF9COseOH9ewCl58TygD/mLYFYwn78Mt4KQ0yPJPT12doyZSHe5cqFP8h9RSHcO4xKsx7w+cLF+Uqm0+8gmrOurIZENHs0BoT/U4kuf9JsOqa3hv2LHtbXUGNM+sfVYaeAGXzX1lUtqj08Klf2RzfkINmgvRKwGhZlamtoX+aJriR6Lga/abNpa+75Jtfu3rOg+bzJztUPLXWzWk/LLMlHFo8hMS5AWW6Xxw8xv4VIc3yc+Ah6qgCkBANNT8DgYEsS4Pc009pwC4PGnpjRg8hhQxeYgczBblce5nCuwvyU45bPVTUGrfEcJDOweZvbfuVt0aN3k2ECDA1al3CyEQ3vDM+Xqv3eCzFOhiTd7UG8Ut5bseVs0=
+  - secure: kenKsXaBulgMKCNxt7j6VOLoxs7Z5NKU+Q99qCT9mxHlzt9acNcjWQwlIcEbkL8QP746F5E8g9ssmfP//zjHJs534aR6qyHxSsLb4R3N/1jYrAsYu/Sixeee6M0i7K1cQp8xcGZeqRncqZ47LuT8CBdmZv1nsIafFT3mJx1w8RvrF5D+HZA9a8IbydvDwBxDcXq4KkeGsFSlqAPP3v5905AQOl0+IO15cQr7hTEO1Fad9zR+CgAOBCrXJR+0OaneCHmOLgRUvPrBABP6LWwhOBIHyRCBk35D/hmoZiVWcn5xNFLLxHA19t+K3amlRXr30NWtyoVkjrExlWlMKvlK9L1CuDNtQtVxRcLrFbieAQkt+QwlmwTjIUth0gmKIw6pj6dVhXQrUnZispAFIOaSls4x7LvuUR3143DtZqF1Sio0iQXfa9dWA/W6KHMwjbaEnFcSB+EeO9Gpw8n13Kq7h4LUyuqc8uEj9OHR19K4FbiXsXZVnAuZqP+c08sWrNFoABkw3P13Pe3vFOf2PnAwCEtxwJEoC3RsxQ3tN1UlpcX9UqQsg96pjKiJW6V6LMkdy2rG6Ef+ERd7JyG1PBmraB4MI3+G16x5LAjyq0Vf2pKUQqGtnn/YtjAIm8YcBVVUp66ou5W+tSGHV8u8LwxEyPhFLi2XLL2p2zjj3/TWhWw=
