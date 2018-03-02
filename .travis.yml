@@ -6,11 +6,10 @@ go:
 services:
 - docker
 script:
-- docker run -d chentex/random-logger:latest
+
 - go get -t -v ./...
 - make
-- docker ps
-- docker run -d luckyj5/docker-plugin
+- docker run luckyj5/docker-plugin
 
 notifications:
   slack:
