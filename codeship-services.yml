@@ -6,6 +6,7 @@ docker-logging-plugin:
   add_docker: true
   depends_on:
     - splunk-hec
+  cached: true
 
 splunk-hec:
   build:
@@ -15,4 +16,4 @@ splunk-hec:
   environment:
   - SPLUNK_START_ARGS=--accept-license
   - SPLUNK_USER=root
-
+  cached: true

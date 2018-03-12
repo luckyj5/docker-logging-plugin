@@ -8,6 +8,9 @@ RUN apt-get update && \
         curl \
         git \
         #python \
+        python-pip \
+        python-dev \
+        build-essential \
         gcc \
         #python-dev \
         #CLI driven testing tool for python
@@ -18,6 +21,7 @@ RUN apt-get update && \
         software-properties-common && \
         apt-get autoclean \
         apt-get clean
+
 
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
 RUN apt-get install -y nodejs
@@ -42,12 +46,9 @@ ENV GOPATH=/go
 
 WORKDIR /go
 
-RUN git clone https://github.com/luckyj5/docker-logging-plugin.git
-
-#COPY script.sh /go/docker-logging-plugin
-#COPY run.js /go/docker-logging-plugin
-#RUN chmod +x /go/docker-logging-plugin/script.sh
-#RUN chmod +x /go/docker-logging-plugin/run.js
 
 
-CMD ["/bin/sh", "-c", "/go/docker-logging-plugin/script.sh"]
+COPY script.sh /go
+RUN chmod +x /go/script.sh
+
+#CMD ["/bin/sh", "-c", "/go/script.sh"]

@@ -2,7 +2,7 @@
   steps:
     - name: dlp
       service: docker-logging-plugin
-      command: /go/docker-logging-plugin/script.sh
+      command: /go/script.sh
     - name: splunk
       service: splunk-hec
       command: echo "hello"

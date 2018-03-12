@@ -1,12 +1,8 @@
-# Base image to get a container ready to run cloudfwd tests
-#
-# to build run:
-# docker build . -f Dockerfile.docker-splunk-6.6.3-sun-java8
 FROM mlaccetti/docker-oracle-java8-ubuntu-16.04
 ENV \
   SPLUNK_PRODUCT=splunk \
-  SPLUNK_VERSION=6.6.3 \
-  SPLUNK_BUILD=e21ee54bc796 \
+  SPLUNK_VERSION=7.0.2 \
+  SPLUNK_BUILD=03bbabbd5c0f \
   SPLUNK_HOME=/opt/splunk \
   SPLUNK_GROUP=splunk \
   SPLUNK_USER=splunk
