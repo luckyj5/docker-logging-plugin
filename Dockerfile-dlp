@@ -44,10 +44,10 @@ WORKDIR /go
 
 RUN git clone https://github.com/luckyj5/docker-logging-plugin.git
 
-COPY script.sh /go/docker-logging-plugin
-COPY run.js /go/docker-logging-plugin
-RUN chmod +x /go/docker-logging-plugin/script.sh
-RUN chmod +x /go/docker-logging-plugin/run.js
+#COPY script.sh /go/docker-logging-plugin
+#COPY run.js /go/docker-logging-plugin
+#RUN chmod +x /go/docker-logging-plugin/script.sh
+#RUN chmod +x /go/docker-logging-plugin/run.js
 
 
 CMD ["/bin/sh", "-c", "/go/docker-logging-plugin/script.sh"]
