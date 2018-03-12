@@ -17,7 +17,7 @@ go test
 sleep 5
 
 ./plugin/rootfs/bin/splunk-log-plugin &
-nodejs run.js
+nodejs ci/run.js
 
 cd test
 pip install -r requirements.txt

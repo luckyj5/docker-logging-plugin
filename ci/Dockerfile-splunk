@@ -54,13 +54,13 @@ WORKDIR /opt/splunk
 
 #Create HEC input
 RUN mkdir -p /opt/splunk/etc/apps/splunk_httpinput/local
-COPY inputs.conf /opt/splunk/etc/apps/splunk_httpinput/local/inputs.conf
+COPY ci/inputs.conf /opt/splunk/etc/apps/splunk_httpinput/local/inputs.conf
 
 #Allow remote logging and reduce the minFreeSpace size to 1GB
 RUN mkdir -p /opt/splunk/etc/system/local
-COPY server.conf /opt/splunk/etc/system/local/server.conf
+COPY ci/server.conf /opt/splunk/etc/system/local/server.conf
 
-COPY run-splunk.sh /opt/splunk/run-splunk.sh
+COPY ci/run-splunk.sh /opt/splunk/run-splunk.sh
 RUN chmod +x run-splunk.sh
 
 # Cleanup

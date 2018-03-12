@@ -1,7 +1,7 @@
 docker-logging-plugin:
   build:
     image: dlp
-    dockerfile_path: Dockerfile-dlp
+    dockerfile_path: ci/Dockerfile-dlp
   hostname: dlp
   add_docker: true
   depends_on:
@@ -11,7 +11,7 @@ docker-logging-plugin:
 splunk-hec:
   build:
     image: splunkhec
-    dockerfile_path: dockerfile-splunk
+    dockerfile_path: ci/Dockerfile-splunk
   hostname: splunk-hec
   environment:
   - SPLUNK_START_ARGS=--accept-license

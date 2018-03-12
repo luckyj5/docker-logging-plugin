@@ -48,7 +48,7 @@ WORKDIR /go
 
 
 
-COPY script.sh /go
+COPY ci/script.sh /go
 RUN chmod +x /go/script.sh
 
 #CMD ["/bin/sh", "-c", "/go/script.sh"]
