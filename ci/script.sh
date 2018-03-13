@@ -9,6 +9,8 @@ git checkout master
 #Go dependencies
 go get -t -v ./...
 
+echo "demo time"
+
 #Compile
 make
 
@@ -25,6 +27,7 @@ nodejs ci/run.js
 cd test
 
 echo "Creating virtual env to run pytests..."
+
 pip3 install virtualenv
 virtualenv --python=python3.5 venv
 source venv/bin/activate
