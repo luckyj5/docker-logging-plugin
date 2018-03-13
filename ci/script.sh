@@ -16,7 +16,10 @@ make
 go test
 sleep 5
 
+# Start docker plugin
 ./plugin/rootfs/bin/splunk-log-plugin &
+
+echo "Running integration test..."
 nodejs ci/run.js
 
 cd test
