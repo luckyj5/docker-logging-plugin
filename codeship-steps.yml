@@ -5,4 +5,4 @@
       command: /go/script.sh
     - name: splunk
       service: splunk-hec
-      command: echo "hello"
+      command: echo "Splunk container"
