@@ -45,11 +45,7 @@ ENV GOPATH=/go
 
 WORKDIR /go
 
-
-
 COPY ci/script.sh /go
 RUN chmod +x /go/script.sh
-COPY ci/unit.sh /go
-RUN chmod +x /go/unit.sh
 
 #CMD ["/bin/sh", "-c", "/go/script.sh"]
