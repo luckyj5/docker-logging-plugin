@@ -6,14 +6,37 @@ import subprocess
 import struct
 import requests
 import os
+<<<<<<< HEAD
+=======
+import sys
+from multiprocessing import Pool
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
 import requests_unixsocket
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 
+<<<<<<< HEAD
 logger = logging.getLogger(__name__)
 TIMEROUT = 500
 SOCKET_START_URL = "http+unix://%2Frun%2Fdocker%2Fplugins%2Fsplunklog.sock/LogDriver.StartLogging"
 SOCKET_STOP_URL = "http+unix://%2Frun%2Fdocker%2Fplugins%2Fsplunklog.sock/LogDriver.StopLogging"
+=======
+
+TIMEROUT = 500
+SOCKET_START_URL = "http+unix://%2Frun%2Fdocker%2Fplugins%2Fsplunklog.sock/" \
+                    "LogDriver.StartLogging"
+SOCKET_STOP_URL = "http+unix://%2Frun%2Fdocker%2Fplugins%2Fsplunklog.sock/" \
+                  "LogDriver.StopLogging"
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s -' +
+                              ' %(levelname)s - %(message)s')
+handler = logging.StreamHandler(sys.stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
 
 
 def start_logging_plugin(plugin_path):
@@ -29,19 +52,101 @@ def kill_logging_plugin(plugin_path):
     os.system("killall " + plugin_path)
 
 
+<<<<<<< HEAD
 def open_fifo(fifo_location):
     '''create and open a file'''
+=======
+def start_log_producer_from_input(file_path, test_input, u_id, timeout=0):
+    '''
+    Spawn a thread to write logs to fifo from the given test input
+    @param: file_path
+    @param: test_input
+            type: array of tuples of (string, Boolean)
+    @param: u_id
+    @param: timeout
+    '''
+    pool = Pool(processes=1)              # Start a worker processes.
+    pool.apply_async(__write_to_fifo, [file_path, test_input, u_id, timeout])
+
+
+def start_log_producer_from_file(file_path, u_id, input_file):
+    '''
+    Spawn a thread to write logs to fifo by streaming the
+    content from given file
+    @param: file_path
+    @param: u_id
+    @param: input_file
+    '''
+    pool = Pool(processes=1)              # Start a worker processes.
+    pool.apply_async(__write_file_to_fifo, [file_path, u_id, input_file])
+
+
+def __write_to_fifo(fifo_path, test_input, u_id, timeout=0):
+    f_writer = __open_fifo(fifo_path)
+
+    for message, partial in test_input:
+        logger.info("Writing data in protobuf with source=%s", u_id)
+        if timeout != 0:
+            time.sleep(timeout)
+        __write_proto_buf_message(f_writer,
+                                  message=message,
+                                  partial=partial,
+                                  source=u_id)
+
+    __close_fifo(f_writer)
+
+
+def __write_file_to_fifo(fifo_path, u_id, input_file):
+    f_writer = __open_fifo(fifo_path)
+
+    logger.info("Writing data in protobuf with source=%s", u_id)
+
+    message = ""
+    with open(input_file, "r") as f:
+        message = f.read(15360)  # 15kb
+        while not message.endswith("\n"):
+            __write_proto_buf_message(f_writer,
+                                      message=message,
+                                      partial=True,
+                                      source=u_id)
+            message = f.read(15360)
+        # write the remaining
+        __write_proto_buf_message(f_writer,
+                                  message=message,
+                                  partial=False,
+                                  source=u_id)
+
+    f.close()
+    __close_fifo(f_writer)
+
+
+def __open_fifo(fifo_location):
+    '''create and open a file'''
+    if os.path.exists(fifo_location):
+        os.unlink(fifo_location)
+
+    os.mkfifo(fifo_location)
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
     fifo_writer = open(fifo_location, 'wb')
 
     return fifo_writer
 
 
+<<<<<<< HEAD
 def write_proto_buf_message(fifo_writer=None,
                             source="test",
                             time_nano=int(time.time() * 1000000000),
                             message="",
                             partial=False,
                             id=""):
+=======
+def __write_proto_buf_message(fifo_writer=None,
+                              source="test",
+                              time_nano=int(time.time() * 1000000000),
+                              message="",
+                              partial=False,
+                              id=""):
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
     '''
     write to fifo in the format of LogMessage protobuf
     '''
@@ -58,6 +163,7 @@ def write_proto_buf_message(fifo_writer=None,
     struct.pack_into(">i", size_buffer, 0, size)
     fifo_writer.write(size_buffer)
     fifo_writer.write(buf)
+<<<<<<< HEAD
 
     fifo_writer.flush()
 
@@ -71,10 +177,43 @@ def request_start_logging(file_path, hec_url, hec_token):
     send a request to the plugin to start logging
     @param: file_path
     '''
+=======
+    fifo_writer.flush()
+
+
+def __close_fifo(fifo_writer):
+    '''close a file'''
+    # os.close(fifo_writer)
+    fifo_writer.close()
+
+
+def request_start_logging(file_path, hec_url, hec_token, options={}):
+    '''
+    send a request to the plugin to start logging
+    :param file_path: the file path
+    :type file_path: string
+
+    :param hec_url: the file path
+    :type hec_url: string
+
+    :param hec_token: the file path
+    :type hec_token: string
+    '''
+    config = {}
+    config["splunk-url"] = hec_url
+    config["splunk-token"] = hec_token
+    config["splunk-insecureskipverify"] = "true"
+    config["splunk-format"] = "json"
+    config["tag"] = ""
+
+    config = {**config, **options}
+
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
     req_obj = {
         "File": file_path,
         "Info": {
             "ContainerID": "test",
+<<<<<<< HEAD
             "Config": {
                 "splunk-url": hec_url,
                 "splunk-token": hec_token,
@@ -82,6 +221,9 @@ def request_start_logging(file_path, hec_url, hec_token):
                 "splunk-format": "json",
                 "tag": ""
             },
+=======
+            "Config": config,
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
             "LogPath": "/home/ec2-user/test.txt"
         }
     }
@@ -100,7 +242,11 @@ def request_start_logging(file_path, hec_url, hec_token):
     if res.status_code != 200:
         raise Exception("Can't establish socket connection")
 
+<<<<<<< HEAD
     logger.info(str(res))
+=======
+    logger.info(res.json())
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
 
 
 def request_stop_logging(file_path):
@@ -119,7 +265,11 @@ def request_stop_logging(file_path):
     if res.status_code != 200:
         raise Exception("Can't establish socket connection")
 
+<<<<<<< HEAD
     logger.info(str(res))
+=======
+    logger.info(res.json())
+>>>>>>> 8ad8f7e575a88fc85cc6520d140f8f1b311b88cd
 
 
 def check_events_from_splunk(index="main",
