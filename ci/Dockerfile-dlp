@@ -44,8 +44,23 @@ ENV GOPATH=/go
 #RUN go get github.com/golang/lint/golint
 
 WORKDIR /go
+RUN git clone https://github.com/luckyj5/docker-logging-plugin.git
 
 COPY ci/script.sh /go
 RUN chmod +x /go/script.sh
 
-#CMD ["/bin/sh", "-c", "/go/script.sh"]
+COPY ci/run_unit_tests.sh /go
+RUN chmod +x /go/run_unit_tests.sh
+
+COPY ci/run_integration_tests.sh /go
+RUN chmod +x /go/run_integration_tests.sh
+
+COPY ci/compile.sh /go
+RUN chmod +x /go/compile.sh
+
+COPY ci/run_functional_tests.sh /go
+RUN chmod +x /go/run_functional_tests.sh
+
+WORKDIR /go/docker-logging-plugin
+
+CMD ["/bin/sh", "-c", "/go/compile.sh"]

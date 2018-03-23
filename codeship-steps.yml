@@ -1,8 +1,14 @@
+- name: splunk
+  service: splunk-hec
+  command: echo "Splunk container"
+
 - type: parallel
   steps:
-    - name: dlp
-      service: docker-logging-plugin
-      command: /go/script.sh
-    - name: splunk
-      service: splunk-hec
-      command: echo "Splunk container"
+    - command: /go/run_unit_tests.sh
+      service: build
+    - command: /go/run_integration_tests.sh
+      service: build
+    - command: /go/run_functional_tests.sh
+      service: build
+
+
