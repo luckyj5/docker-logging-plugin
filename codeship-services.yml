@@ -6,7 +6,7 @@ splunk-hec:
   environment:
   - SPLUNK_START_ARGS=--accept-license
   - SPLUNK_USER=root
-  cached: true
+
 
 
 build:
@@ -17,17 +17,5 @@ build:
   add_docker: true
   depends_on:
     - splunk-hec
-  cached: true
 
 
-#test:
-#  build:
-#    image: dlp
-#    dockerfile_path: ci/Dockerfile-dlp
-#  hostname: dlp2
-#  add_docker: true
-#  volumes_from:
-#    - build
-#  depends_on:
-#    - splunk-hec
-#  cached: true
