@@ -61,6 +61,4 @@ RUN chmod +x /go/compile.sh
 COPY ci/run_functional_tests.sh /go
 RUN chmod +x /go/run_functional_tests.sh
 
-WORKDIR /go/docker-logging-plugin
-
-CMD ["/bin/sh", "-c", "/go/compile.sh"]
+RUN /go/compile.sh
