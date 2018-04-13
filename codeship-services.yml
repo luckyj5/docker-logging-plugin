@@ -1,13 +1,3 @@
-docker-logging-plugin:
-  build:
-    image: dlp
-    dockerfile_path: ci/Dockerfile-dlp
-  hostname: dlp
-  add_docker: true
-  depends_on:
-    - splunk-hec
-  cached: true
-
 splunk-hec:
   build:
     image: splunkhec
@@ -16,4 +6,16 @@ splunk-hec:
   environment:
   - SPLUNK_START_ARGS=--accept-license
   - SPLUNK_USER=root
-  cached: true
+
+
+
+build:
+  build:
+    image: dlp
+    dockerfile_path: ci/Dockerfile-dlp
+  hostname: dlp
+  add_docker: true
+  depends_on:
+    - splunk-hec
+
+

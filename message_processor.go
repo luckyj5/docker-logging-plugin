@@ -71,7 +71,7 @@ func sendMessage(l logger.Logger, buf *logdriver.LogEntry, containerid string) b
 
 	msg.Line = buf.Line
 	msg.Source = buf.Source
-	msg.Partial = buf.Partial
+	//msg.Partial = buf.Partial
 	msg.Timestamp = time.Unix(0, buf.TimeNano)
 	err := l.Log(&msg)
 
