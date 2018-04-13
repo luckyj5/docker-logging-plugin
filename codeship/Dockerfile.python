@@ -11,4 +11,4 @@ COPY ./test/requirements.txt ./
 RUN  pip install -r requirements.txt
 
 COPY ./test/ ./
-COPY ./codeship/functional_tests.sh ./
+COPY ./codeship/functional_tests.sh ./codeship/

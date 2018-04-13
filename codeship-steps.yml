@@ -1,7 +1,8 @@
 - name: compile
   service: test
   command: bash ./codeship/compile.sh
-- type: parallel
+- name: testing
+  type: parallel
   steps:
     - name: unit tests
       service: test
