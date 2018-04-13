@@ -2,10 +2,11 @@ FROM python:3.5-slim
 
 # ugly workaround to allow the main script to be called via
 # ./codeship/functional_tests.sh
-RUN mkdir -p /codeship/codeship
-WORKDIR /codeship
+RUN \
+	mkdir -p /splunk/codeship && \
+	mkdir -p /splunk/plugin
 
-RUN mkdir -p /splunk/plugin
+WORKDIR /splunk
 
 COPY ./test/requirements.txt ./
 RUN  pip install -r requirements.txt
