@@ -5,7 +5,7 @@ all: clean docker rootfs create test
 
 clean:
 	@echo "### rm ./plugin"
-	rm -rf ./plugin
+	rm -rf "./plugin/*"
 
 docker:
 	@echo "### docker build: rootfs image with splunk-log-plugin"

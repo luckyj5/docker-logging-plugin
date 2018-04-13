@@ -1,14 +1,14 @@
-- name: splunk
-  service: splunk-hec
-  command: echo "Splunk container"
-
+- name: compile
+  service: test
+  command: bash ./codeship/compile.sh
 - type: parallel
   steps:
-    - command: /go/run_unit_tests.sh
-      service: build
-    - command: /go/run_integration_tests.sh
-      service: build
-    - command: /go/run_functional_tests.sh
-      service: build
-
-
+    - name: unit tests
+      service: test
+      command: bash ./codeship/unit_tests.sh
+    - name: integration tests
+      service: test
+      command: bash ./codeship/integration_tests.sh
+    - name: functional tests
+      service: python
+      command: bash ./codeship/functional_tests.sh
