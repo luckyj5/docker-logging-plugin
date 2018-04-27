@@ -1,19 +1,29 @@
-docker-logging-plugin:
+test:
   build:
-    image: dlp
-    dockerfile_path: ci/Dockerfile-dlp
-  hostname: dlp
+    dockerfile_path: codeship/Dockerfile.build
   add_docker: true
+  cached: true
+  volumes:
+    - ./plugin:/go/src/github.com/splunk/docker-logging-plugin/plugin
   depends_on:
     - splunk-hec
+
+python:
+  build:
+    dockerfile_path: codeship/Dockerfile.python
+  add_docker: true
   cached: true
+  volumes:
+    - ./plugin:/splunk/plugin
+  depends_on:
+    - splunk-hec
 
 splunk-hec:
   build:
-    image: splunkhec
-    dockerfile_path: ci/Dockerfile-splunk
+    context: ./codeship/
+    dockerfile_path: Dockerfile.splunk
   hostname: splunk-hec
   environment:
-  - SPLUNK_START_ARGS=--accept-license
-  - SPLUNK_USER=root
+    - SPLUNK_START_ARGS=--accept-license
+    - SPLUNK_USER=root
   cached: true

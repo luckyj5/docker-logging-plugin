@@ -1,2 +1,5 @@
-.git
+.dockerignore
+.gitignore
+codeship-services.yml
+codeship-steps.yml
 plugin

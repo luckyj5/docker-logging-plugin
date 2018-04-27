@@ -1,8 +1,15 @@
-- type: parallel
+- name: compile
+  service: test
+  command: bash ./codeship/compile.sh
+- name: testing
+  type: parallel
   steps:
-    - name: dlp
-      service: docker-logging-plugin
-      command: /go/script.sh
-    - name: splunk
-      service: splunk-hec
-      command: echo "Splunk container"
+    - name: unit tests
+      service: test
+      command: bash ./codeship/unit_tests.sh
+    - name: integration tests
+      service: test
+      command: bash ./codeship/integration_tests.sh
+    - name: functional tests
+      service: python
+      command: bash ./codeship/functional_tests.sh
